@@ -5,6 +5,10 @@ import socket
 
 app = Flask(__name__)
 
+@app.route('/')
+
+def home():
+    return "Rota Padrao"  # return default route
 
 @app.route('/api/v1/info')
 
@@ -24,5 +28,5 @@ def health():
 
 if __name__ == '__main__':
 
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=5000)
 
