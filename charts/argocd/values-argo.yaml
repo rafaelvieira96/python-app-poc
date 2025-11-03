@@ -1,28 +1,37 @@
-redis-ha:
-  enabled: false
-
-controller:
-  replicas: 1
-
-server:
-  replicas: 1
-
-repoServer:
-  replicas: 1
-
-applicationSet:
-  replicas: 1
-
 global:
-  domain: argocd.test.com
-
-certificate:
-  enabled: true
+  domain: argocd-ing.backstage.local
 
 server:
-  ingress:
+  extraArgs:
+    - --insecure
+
+  service:
+    type: ClusterIP
     annotations:
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      cloud.google.com/neg: '{"ingress": true}'
+      cloud.google.com/backend-config: '{"ports": {"http":"argocd-backend-config"}}'
+    ports:
+      - name: http
+        port: 80
+        protocol: TCP
+        targetPort: 8080
+
+  ingress:
     enabled: true
-    ingressClassName: nginx
-    tls: true
+    controller: gke
+    annotations:
+      kubernetes.io/ingress.allow-http: "true"
+    gke:
+      backendConfig:
+        healthCheck:
+          checkIntervalSec: 30
+          timeoutSec: 5
+          healthyThreshold: 1
+          unhealthyThreshold: 2
+          type: HTTP
+          requestPath: /healthz
+          port: 8080
+      # Remover frontendConfig redirect ou deixá-lo desabilitado
+      # frontendConfig:
+      #   redirectToHttps:
+      #     enabled: false
