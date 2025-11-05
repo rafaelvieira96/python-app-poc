@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rs=0
+rs=1
 
 kubectl scale statefulset -n argocd argocd-application-controller --replicas=$rs
 
