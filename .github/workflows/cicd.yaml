@@ -2,8 +2,8 @@ name: cicd
 
 on:
   push:
-    paths:
-      - src/**
+    # paths:
+    #   - src/**
     branches:
       - develop
 
@@ -38,24 +38,33 @@ jobs:
 
       - uses: actions/checkout@v3
 
+      # - name: Commit changes
+      #   uses: EndBug/add-and-commit@v9
+      #   with:
+      #     message: 'Updates values.yaml with commit ${{needs.ci.outputs.commit_id}}'
+
+      # - name: Install argocd
+      #   shell: bash
+      #   run: |
+      #     curl -ksSL -o argocd https://argocd-server.argocd/download/argocd-linux-amd64
+      #     chmod +x argocd
+      #     sudo mv ./argocd /usr/local/bin/argocd
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y python3-pip jq
+          pip install yq
+          curl -ksSL -o argocd https://argocd-server.argocd/download/argocd-linux-amd64
+          chmod +x argocd
+          mv ./argocd /usr/local/bin/argocd
+
       - name: Modify values file
         shell: bash
         run: |
           echo ${{needs.ci.outputs.commit_id}}
           pip install yq
           yq -Yi '.image.tag = "${{needs.ci.outputs.commit_id}}"' charts/python-app/values.yaml
-
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9
-        with:
-          message: 'Updates values.yaml with commit ${{needs.ci.outputs.commit_id}}'
-
-      - name: Install argocd
-        shell: bash
-        run: |
-          curl -ksSL -o argocd https://argocd-server.argocd/download/argocd-linux-amd64
-          chmod +x argocd
-          sudo mv ./argocd /usr/local/bin/argocd
 
       # - name: Argocd app sync
       #   shell: bash
