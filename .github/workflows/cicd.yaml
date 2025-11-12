@@ -69,7 +69,7 @@ jobs:
         run: |
           argocd login argocd-server.argocd \
             --insecure  \
-            --grpc-web \
+            #--grpc-web \
             --username admin \
             --password  ${{ secrets.ARGOCD_PASSWORD }}
-          argocd app sync python-app
+          # argocd app sync python-app
