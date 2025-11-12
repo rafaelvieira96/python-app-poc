@@ -53,19 +53,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip jq
-          pip install yq
-          curl -ksSL -o argocd https://argocd-server.argocd/download/argocd-linux-amd64
-          chmod +x argocd
-          mv ./argocd /usr/local/bin/argocd
+          curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+          rm argocd-linux-amd64
+          argocd --version
 
-      - name: Modify values file
-        shell: bash
-        run: |
-          echo ${{needs.ci.outputs.commit_id}}
-          pip install yq
-          yq -Yi '.image.tag = "${{needs.ci.outputs.commit_id}}"' charts/python-app/values.yaml
+      # - name: Modify values file
+      #   shell: bash
+      #   run: |
+      #     echo ${{needs.ci.outputs.commit_id}}
+      #     pip install yq
+      #     yq -Yi '.image.tag = "${{needs.ci.outputs.commit_id}}"' charts/python-app/values.yaml
 
       # - name: Argocd app sync
       #   shell: bash
