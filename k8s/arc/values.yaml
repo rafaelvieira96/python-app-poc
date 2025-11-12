@@ -1,0 +1,21 @@
+# manter 2 runners ociosos (pré-aquecidos)
+minRunners: 1
+maxRunners: 2
+
+labels:
+  - gke
+  - arc
+
+# Ex.: usar o modo kubernetes (evita Docker privilegiado)
+containerMode:
+  type: kubernetes
+
+template:
+  spec:
+    # garanta requests/limits coerentes para evitar re-agendamentos
+    containers:
+      - name: runner
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
