@@ -34,7 +34,7 @@ jobs:
 
   cd:
     needs: ci
-    runs-on: arc-runner-set
+    runs-on: gke-agents
     steps:
 
       - uses: actions/checkout@v3

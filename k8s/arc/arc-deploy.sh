@@ -1,5 +1,5 @@
-INSTALLATION_NAME="arc-runner-set"
-NAMESPACE="arc-runners"
+INSTALLATION_NAME="gke-agents"
+NAMESPACE="agents"
 GITHUB_CONFIG_URL="https://github.com/rafaelvieira96/python-app-poc"
 GITHUB_PAT="xxxx"
 helm install "${INSTALLATION_NAME}" \
