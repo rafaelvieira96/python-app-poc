@@ -1,2 +1,3 @@
 virtualenv/
-k8s/arc/*
+arc-deploy.sh
+arcsystem.sh
