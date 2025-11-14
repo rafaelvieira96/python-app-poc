@@ -27,51 +27,42 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: rafaelvieira96/python-app:${{ env.COMMIT_ID }}
-    outputs:
-      commit_id: ${{ env.COMMIT_ID }}
+          tags: rafaelvieira96/python-app:latest
+    # outputs:
+    #   commit_id: ${{ env.COMMIT_ID }}
 
   cd:
     needs: ci
-    runs-on: arc-runner-set
+    runs-on: self-hosted
     steps:
 
       - uses: actions/checkout@v3
+
+      # - name: Modify values file
+      #   shell: bash
+      #   run: |
+      #     echo ${{needs.ci.outputs.commit_id}}
+      #     pip install yq
+      #     yq -Yi '.image.tag = "${{needs.ci.outputs.commit_id}}"' charts/python-app/values.yaml
 
       # - name: Commit changes
       #   uses: EndBug/add-and-commit@v9
       #   with:
       #     message: 'Updates values.yaml with commit ${{needs.ci.outputs.commit_id}}'
 
-      # - name: Install argocd
-      #   shell: bash
-      #   run: |
-      #     curl -ksSL -o argocd https://argocd-server.argocd/download/argocd-linux-amd64
-      #     chmod +x argocd
-      #     sudo mv ./argocd /usr/local/bin/argocd
-
-      - name: Install dependencies
-        run: |
-          apt-get update
-          apt-get install -y python3-pip jq
-          pip install yq
-          curl -ksSL -o argocd https://argocd-server.argocd/download/argocd-linux-amd64
-          chmod +x argocd
-          mv ./argocd /usr/local/bin/argocd
-
-      - name: Modify values file
+      - name: Install argocd
         shell: bash
         run: |
-          echo ${{needs.ci.outputs.commit_id}}
-          pip install yq
-          yq -Yi '.image.tag = "${{needs.ci.outputs.commit_id}}"' charts/python-app/values.yaml
+          curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+          rm argocd-linux-amd64
 
-      # - name: Argocd app sync
-      #   shell: bash
-      #   run: |
-      #     argocd login argocd-server.argocd \
-      #       --insecure  \
-      #       --grpc-web \
-      #       --username admin \
-      #       --password  ${{ secrets.ARGOCD_PASSWORD }}
-      #     argocd app sync python-app
+      - name: Argocd app sync
+        shell: bash
+        run: |
+          argocd login argocd-server.argocd \
+            --insecure  \
+            --grpc-web \
+            --username admin \
+            --password  ${{ secrets.ARGOCD_PASSWORD }}
+          argocd app sync python-app-poc-v2

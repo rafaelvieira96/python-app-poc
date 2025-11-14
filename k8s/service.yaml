@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: python-app
 spec:
-  type: NodePort
   selector:
     app: python-app
   ports:
     - protocol: TCP
-      port: 8080       # Porta exposta no cluster (Ingress usa esta)
-      targetPort: 5000 # Porta do container dentro do Pod
+      port: 8080
+      targetPort: 5000

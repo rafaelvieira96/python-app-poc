@@ -1,21 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ing-python-app
-  annotations:
-    spec.ingressClassName: "gce"  # Usa o controlador padrão do GKE
-    kubernetes.io/ingress.allow-http: "true"  # Habilita HTTP (opcional)
-    # Opcional: se quiser forçar HTTPS
-    # ingress.gcp.kubernetes.io/pre-shared-cert: "meu-cert-ssl"
+  name: python-app
 spec:
   rules:
-  - host: "python-app.backstage.local"
+  - host: "python-app.test.com"
     http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: python-app
-            port:
-              number: 8080
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: python-app
+              port:
+                number: 8080

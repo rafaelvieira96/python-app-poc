@@ -1,0 +1,9 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: rafa-runners
+spec:
+  replicas: 1
+  template:
+    spec:
+      repository: rafaelvieira96/python-app-poc
