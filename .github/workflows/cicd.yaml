@@ -33,7 +33,7 @@ jobs:
 
   cd:
     needs: ci
-    runs-on: rafa-runners-56c88-svpq7
+    runs-on: self-hosted
     steps:
 
       - uses: actions/checkout@v3
