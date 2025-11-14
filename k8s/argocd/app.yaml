@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: 'https://github.com/rafaelvieira96/python-app-poc.git'
     targetRevision: develop
-    path: charts/python-app
+    path: charts/python-app-v2
     helm:
       parameters:
         - name: image.repository
