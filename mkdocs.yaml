@@ -1,7 +1,7 @@
-site_name: 'python-app'
+site_name: 'python-app-poc'
 site_description: 'Main documentation for the python-app'
-repo_url: https://github.com/ricardoandre97/python-app
-edit_uri: edit/main/docs
+repo_url: https://github.com/rafaelvieira96/python-app-poc
+edit_uri: edit/develop/docs
 
 plugins:
   - techdocs-core
